@@ -111,9 +111,11 @@ Fleevo Studio специализируется на создании профе�
 
 CONTACT_TEXT = """Связаться с нами:
 
-Пишите менеджеру: @Fleevo
+По всем вопросам сотрудничества и заказов обращайтесь к нашему менеджеру:
 
-Отвечаем в течение 1-2 часов."""
+💬 Telegram: @Fleevo
+
+Время ответа — в течение 1–2 часов в рабочее время."""
 
 
 def main_keyboard():
@@ -160,7 +162,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.edit_message_text(CONTACT_TEXT, reply_markup=back_keyboard())
     elif data == "order":
         await query.edit_message_text(
-            "Оформление заявки\n\nШаг 1 из 3\n\nКак вас зовут?",
+            "Оформление заявки\n\nБлагодарим за интерес к Fleevo Studio.\n\nПожалуйста, ответьте на несколько вопросов — это поможет нам подготовить для вас точное предложение.\n\nШаг 1 из 3\n\nУкажите ваше имя:",
             reply_markup=cancel_keyboard()
         )
         return NAME
@@ -181,7 +183,7 @@ async def get_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("💬 Хочу консультацию", callback_data="svc_consult")],
     ])
     await update.message.reply_text(
-        f"Отлично, {context.user_data['name']}!\n\nШаг 2 из 3\n\nКакая услуга вас интересует?",
+        f"{context.user_data['name']}, благодарим за ответ.\n\nШаг 2 из 3\n\nВыберите интересующую вас услугу:",
         reply_markup=services
     )
     return SERVICE
@@ -204,12 +206,12 @@ async def get_service(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
     context.user_data["service"] = SERVICE_NAMES.get(query.data, query.data)
     await query.edit_message_text(
-        f"Шаг 3 из 3\n\n{context.user_data['service']} - хороший выбор!\n\n"
-        f"Расскажите подробнее:\n"
-        f"- Что нужно сделать?\n"
-        f"- Есть примеры которые нравятся?\n"
-        f"- Когда нужен результат?\n\n"
-        f"Пишите в свободной форме:",
+        f"Шаг 3 из 3\n\nВы выбрали: {context.user_data['service']}.\n\n"
+        f"Пожалуйста, опишите ваш запрос подробнее:\n"
+        f"— Что именно необходимо создать?\n"
+        f"— Есть ли референсы или примеры?\n"
+        f"— Каковы предпочтительные сроки?\n\n"
+        f"Напишите в свободной форме — мы подготовим предложение под ваш запрос:",
         reply_markup=cancel_keyboard()
     )
     return DETAILS
@@ -224,7 +226,7 @@ async def get_details(update: Update, context: ContextTypes.DEFAULT_TYPE):
     username = user.username if user.username else "нет username"
 
     await update.message.reply_text(
-        "Заявка принята!\n\nМы свяжемся с вами в ближайшее время.\nЕсли хотите ускорить — напишите напрямую: @Fleevo",
+        "Ваша заявка принята.\n\nМы рассмотрим её и свяжемся с вами в ближайшее время.\nЕсли вопрос срочный — напишите напрямую: @Fleevo",
         reply_markup=main_keyboard()
     )
 
